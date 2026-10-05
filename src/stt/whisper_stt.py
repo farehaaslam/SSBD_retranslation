@@ -20,6 +20,6 @@ class FasterWhisperSTT:
 
 if __name__ == "__main__":
     stt = FasterWhisperSTT(model_size="base", device="cuda", compute_type="float16")
-    text = stt.transcribe(r"input\C in 100 Seconds.mp3")
-    print("\n--- Full Transcript ---")
+    text = stt.transcribe(r"inputC in 100 Seconds.mp3")
+    print("n--- Full Transcript ---")
     print(text)
