@@ -310,103 +310,18 @@ Turkish, Dutch, Thai, and Vietnamese.
 The mapping from display names to ASR language codes is defined in
 [`src/config/config.py`](C:/Users/fareh/coding/speech/src/config/config.py).
 
-## Device behavior
+## 📄 Research Paper
 
-Faster-Whisper uses CUDA when `torch.cuda.is_available()` is true and CPU
-otherwise. The current application passes `compute_type="int8"` to the
-Faster-Whisper wrapper. Qwen uses Transformers' `device_map="auto"` and
-`torch_dtype="auto"` so Transformers can place and configure the model for
-the available hardware.
+This project is based on the research paper:
 
-For a CPU-only machine, use a smaller Whisper model and expect substantially
-higher latency. The Qwen model also requires enough system memory for loading
-and generation.
+**[Self-Speculative Biased Decoding for Faster Re-Translation](https://arxiv.org/abs/2509.21740)**
 
-## Troubleshooting
+- **Authors:** Linxiao Zeng et al.
+- **Publication:** arXiv preprint
+- **arXiv ID:** 2509.21740
+- **Year:** 2025
+- **DOI:** [10.48550/arXiv.2509.21740](https://doi.org/10.48550/arXiv.2509.21740)
 
-### `ModuleNotFoundError`
+**Publication Note:** The referenced work is available as an arXiv preprint. No peer-reviewed conference or journal publication has been verified as of November 2026.
 
-Run the application from the repository root and ensure dependencies are
-installed in the active environment:
-
-```powershell
-uv sync
-uv run python -m src.main
-```
-
-### Model download or Hugging Face errors
-
-The first run downloads model files. Verify that:
-
-- The machine has internet access.
-- The model identifier in `SSBD_MODEL` is valid.
-- The Hugging Face cache directory is writable.
-- Any required Hugging Face authentication is configured in the environment.
-
-### Microphone is unavailable
-
-Check browser microphone permissions and confirm that the selected input
-device is available to the browser. Reload the Gradio page after changing
-permissions.
-
-### Translation is slow
-
-Try a smaller `WHISPER_MODEL_SIZE`, increase `ASR_UPDATE_SECONDS`, or increase
-`ASR_MIN_AUDIO_SECONDS` to reduce the number of repeated full-buffer
-transcriptions. A CUDA-enabled PyTorch installation is recommended for live
-use.
-
-### Visible translation is blank
-
-This can be expected when the full translation contains no more than
-`MASK_K` tokenizer tokens. Reduce `MASK_K` or set it to `0` to display the
-complete translation.
-
-### Source and target languages are identical
-
-The interface prevents starting a session when both dropdowns contain the
-same language. Select two different languages.
-
-## Development and validation
-
-Compile all Python modules:
-
-```powershell
-python -m compileall -q src main.py scripts/multi_language.py
-```
-
-With uv:
-
-```powershell
-uv run python -m compileall -q src main.py scripts/multi_language.py
-```
-
-Check the working-tree patch for whitespace errors:
-
-```powershell
-git diff --check
-```
-
-There is currently no committed automated test suite. The most important
-behavior to preserve when changing the pipeline is:
-
-- Accumulated-buffer transcription.
-- Skipping translation when the transcript is unchanged.
-- Keeping the full draft separate from its Mask-k display projection.
-- Keeping audio and translation state per Gradio session.
-- Loading model instances once at application startup.
-
-## Notes on `llama_config.py`
-
-[`src/config/llama_config.py`](C:/Users/fareh/coding/speech/src/config/llama_config.py)
-contains existing configuration for a possible `llama.cpp` server and Gemma
-GGUF model. It is not part of the active Qwen/Transformers execution path.
-The live application currently uses `QwenTranslationModel` and does not start
-a llama.cpp server.
-
-## License and model usage
-
-This repository does not currently declare a project license. Review and
-comply with the licenses and usage terms of Faster-Whisper, Qwen, PyTorch,
-Transformers, Gradio, and any downloaded model weights before redistributing
-the application or model files.
+This project presents an independent implementation of the proposed methodology for academic purposes as part of a minor project. Please refer to the original paper for the theoretical foundations and methodology.
